@@ -2,6 +2,8 @@
 const program = require("commander");
 // fsモジュールをfsオブジェクトとしてインポート
 const fs = require("fs");
+// markedモジュールをインポート
+const marked = require("marked");
 
 // コマンドライン引数をパース
 program.parse(process.argv);
@@ -17,6 +19,7 @@ fs.readFile(filepPath, { encoding: "utf8" }, (err, file) => {
     process.exit(1);
     return;
   }
-  console.log(file);
+  const html = marked(file);
+  console.log(html);
 }
 );
