@@ -2,15 +2,15 @@
 const program = require("commander");
 // fsモジュールをfsオブジェクトとしてインポート
 const fs = require("fs");
-// markedモジュールをインポート
-const marked = require("marked");
+// md2htmlモジュールをインポート
+const md2html = require("./md2html");
 
 // gfmオプションを定義する
 program.option("--gfm", "GFMを有効にする");
 // コマンドライン引数をパース
 program.parse(process.argv);
 // ファイルパスを配列から取り出す
-const filepPath = program.args[0];
+const filePath = program.args[0];
 
 // コマンドライン引数のオプションを取得し、デフォルトのオプションを上書きする
 const cliOptions = {
@@ -19,7 +19,7 @@ const cliOptions = {
 };
 
 // ファイルを非同期で読み込む
-fs.readFile(filepPath, { encoding: "utf8" }, (err, file) => {
+fs.readFile(filePath, { encoding: "utf8" }, (err, file) => {
   // エラーハンドリング追加
   if (err) {
     console.error(err.message);
@@ -27,10 +27,7 @@ fs.readFile(filepPath, { encoding: "utf8" }, (err, file) => {
     process.exit(1);
     return;
   }
-  const html = marked(file, {
-    // オプションの値を使用する
-    gfm: cliOptions.gfm,
-  });
+  const html = md2html(file, cliOptions);
   console.log(html);
 }
 );
