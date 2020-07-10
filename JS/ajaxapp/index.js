@@ -1,9 +1,12 @@
-function main() {
-  fetchUserInfo('js-primer-example')
-    .catch((error) => {
-      // Promiseチェーンの中で発生したエラーを受け取る
-      console.error('エラーが発生しました');
-    })
+async function main() {
+  try {
+    const userId = getUserId();
+    const userInfo = await fetchUserInfo(userId);
+    const view = createView(userInfo);
+    displayView(view);
+  } catch (error) {
+    console.error(`エラーが発生しました (${error})`);
+  }
 }
 
 function fetchUserInfo(userId) {
@@ -18,15 +21,15 @@ function fetchUserInfo(userId) {
       } else {
         // else コンソールにユーザー情報を表示
         console.log('成功')
-        return response.json().then(userInfo => {
-          const view = createView(userInfo);
-          displayView(view);
-        })
+        // jsonオブジェクトで解決されるPromiseを返す
+        return response.json();
       }
-    }).catch(error => {
-      // catch: Rejected: ネットワークエラー
-      console.error(error)
-    })
+    });
+}
+
+function getUserId() {
+  value = document.getElementById('userId').value;
+  return encodeURIComponent(value);
 }
 
 function createView(userInfo) {
